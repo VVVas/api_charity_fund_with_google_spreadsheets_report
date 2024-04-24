@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     auth_provider_x509_cert_url: Optional[str] = None
     client_x509_cert_url: Optional[str] = None
     email_user: Optional[str] = None
+    email: Optional[str] = None
 
     class Config:
         """Конфигурация настроек приложения."""
