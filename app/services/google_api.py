@@ -58,13 +58,14 @@ async def spreadsheets_update_value(
     table_values = [
         ['Отчёт от', now_date_time],
         ['Топ проектов по скорости закрытия'],
-        ['Название проекта', 'Время сбора', 'Описание']
+        ['Название проекта', 'Время сбора, дней', 'Описание']
     ]
     # Здесь в таблицу добавляются строчки
     for project in projects:
+        duration = project.close_date - project.create_date
         new_row = [
             project.name,
-            str(project.close_date - project.create_date),
+            duration.days,
             project.description
         ]
         table_values.append(new_row)

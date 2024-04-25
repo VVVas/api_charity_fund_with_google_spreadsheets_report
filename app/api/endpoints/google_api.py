@@ -14,10 +14,10 @@ from app.services.google_api import (set_user_permissions, spreadsheets_create,
 router = APIRouter()
 
 
-@router.post(
+@router.get(
     '/',
     # Тип возвращаемого эндпоинтом ответа
-    response_model=list[dict[str, str]],
+    response_model=str,
     # # Определяем зависимости
     # dependencies=[Depends(current_superuser)],
 )
@@ -31,9 +31,13 @@ async def get_report(
     charity_projects = await charity_project_crud.get_projects_by_completion_rate(
         session
     )
-    # spreadsheetid = await spreadsheets_create(wrapper_services)
-    # await set_user_permissions(spreadsheetid, wrapper_services)
-    # await spreadsheets_update_value(spreadsheetid,
-    #                                 charity_projects,
-    #                                 wrapper_services)
-    return charity_projects
+    print(len(charity_projects))
+    spreadsheetid = await spreadsheets_create(wrapper_services)
+    print(spreadsheetid)
+    await set_user_permissions(spreadsheetid, wrapper_services)
+    print(spreadsheetid)
+    await spreadsheets_update_value(spreadsheetid,
+                                    charity_projects,
+                                    wrapper_services)
+    print(spreadsheetid)
+    return f'https://docs.google.com/spreadsheets/d/{spreadsheetid}'
