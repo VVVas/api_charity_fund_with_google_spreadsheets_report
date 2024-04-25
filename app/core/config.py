@@ -18,7 +18,6 @@ class Settings(BaseSettings):
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
 
-    # Переменные для Google API
     type: Optional[str] = None
     project_id: Optional[str] = None
     private_key_id: Optional[str] = None
@@ -31,6 +30,11 @@ class Settings(BaseSettings):
     client_x509_cert_url: Optional[str] = None
     email_user: Optional[str] = None
     email: Optional[str] = None
+
+    spreadsheet_title: str = 'Топ проектов по скорости закрытия на {} по UTC'
+    spreadsheet_header: list = ['Название проекта', 'Дней сбора', 'Описание']
+    spreadsheet_title_header_row_quantity: int = 2
+    spreadsheet_column_quantity: int = 3
 
     class Config:
         """Конфигурация настроек приложения."""
