@@ -12,7 +12,11 @@ async def check_charity_project_name_duplicate(
         session: AsyncSession,
 ) -> None:
     """Проверка существования проекта с таким же именем."""
-    charity_project_id = await charity_project_crud.get_charity_project_id_by_name(charity_project_name, session)
+    charity_project_id = (
+        await charity_project_crud.get_charity_project_id_by_name(
+            charity_project_name, session
+        )
+    )
     if charity_project_id is not None:
         raise HTTPException(
             status_code=HTTPStatus.BAD_REQUEST,
@@ -25,7 +29,9 @@ async def check_charity_project_exists(
         session: AsyncSession,
 ) -> CharityProject:
     """Проверка существования проекта по его id."""
-    charity_project = await charity_project_crud.get(charity_project_id, session)
+    charity_project = await charity_project_crud.get(
+        charity_project_id, session
+    )
     if charity_project is None:
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND,
