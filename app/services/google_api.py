@@ -2,8 +2,7 @@ from aiogoogle import Aiogoogle
 from app.core.config import settings
 from app.core.utils import aware_utcnow
 
-# Константа с форматом строкового представления времени
-FORMAT = "%Y/%m/%d %H:%M"
+DATE_FORMAT = "%Y/%m/%d %H:%M"
 ALPHABET_START = 'A'
 ZERO_COMPENSATOR = -1
 
@@ -14,9 +13,9 @@ async def spreadsheets_create(
 
     service = await wrapper_services.discover('sheets', 'v4')
 
+    title = settings.spreadsheet_title.format(aware_utcnow().strftime(DATE_FORMAT))
     row_quantity = charity_projects_quantity + settings.spreadsheet_title_header_row_quantity
-    title = settings.spreadsheet_title.format(aware_utcnow().strftime(FORMAT))
-    # Формируем тело запроса
+
     spreadsheet_body = {
         'properties': {'title': title,
                        'locale': 'ru_RU'},
@@ -26,7 +25,7 @@ async def spreadsheets_create(
                                    'gridProperties': {'rowCount': row_quantity,
                                                       'columnCount': settings.spreadsheet_column_quantity}}}]
     }
-    # Выполняем запрос
+
     response = await wrapper_services.as_service_account(
         service.spreadsheets.create(json=spreadsheet_body)
     )
@@ -38,10 +37,13 @@ async def set_user_permissions(
         spreadsheetid: str,
         wrapper_services: Aiogoogle
 ) -> None:
+
+    service = await wrapper_services.discover('drive', 'v3')
+
     permissions_body = {'type': 'user',
                         'role': 'writer',
                         'emailAddress': settings.email_user}
-    service = await wrapper_services.discover('drive', 'v3')
+
     await wrapper_services.as_service_account(
         service.permissions.create(
             fileId=spreadsheetid,
@@ -55,12 +57,11 @@ async def spreadsheets_update_value(
         projects: list,
         wrapper_services: Aiogoogle
 ) -> None:
-    # now_date_time = datetime.now(timezone.utc).strftime(FORMAT)
 
     service = await wrapper_services.discover('sheets', 'v4')
 
     table_values = [
-        [settings.spreadsheet_title.format(aware_utcnow().strftime(FORMAT))]
+        [settings.spreadsheet_title.format(aware_utcnow().strftime(DATE_FORMAT))]
     ]
     table_values.append(settings.spreadsheet_header)
 
