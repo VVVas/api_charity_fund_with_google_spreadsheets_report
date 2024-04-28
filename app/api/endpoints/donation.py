@@ -20,8 +20,7 @@ async def get_all_donations(
     session: AsyncSession = Depends(get_async_session),
 ) -> list[DonationDBAdmin]:
     """Получение всех пожертвований, только для администратора."""
-    all_donations = await donation_crud.get_multi(session)
-    return all_donations
+    return await donation_crud.get_multi(session)
 
 
 @router.post(
@@ -52,7 +51,4 @@ async def get_my_donations(
     user: User = Depends(current_user)
 ) -> list[DonationDB]:
     """Получение своих пожертвований пользователем."""
-    donations = await donation_crud.get_by_user(
-        session=session, user=user
-    )
-    return donations
+    return await donation_crud.get_by_user(session=session, user=user)

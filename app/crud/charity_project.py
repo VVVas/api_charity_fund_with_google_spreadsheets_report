@@ -20,8 +20,7 @@ class CRUDCharityProject(CRUDBase):
                 CharityProject.name == charity_project_name
             )
         )
-        db_charity_project_id = db_charity_project_id.scalars().first()
-        return db_charity_project_id
+        return db_charity_project_id.scalars().first()
 
     async def get_projects_by_completion_rate(
             self,
@@ -46,8 +45,7 @@ class CRUDCharityProject(CRUDBase):
                 extract('day', CharityProject.create_date)
             )
         )
-        charity_projects = charity_projects.all()
-        return charity_projects
+        return charity_projects.all()
 
 
 charity_project_crud = CRUDCharityProject(CharityProject)

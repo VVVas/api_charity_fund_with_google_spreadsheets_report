@@ -28,8 +28,7 @@ async def get_all_charity_projects(
     session: AsyncSession = Depends(get_async_session),
 ) -> list[CharityProjectDB]:
     """Получение всех проектов."""
-    all_charity_projects = await charity_project_crud.get_multi(session)
-    return all_charity_projects
+    return await charity_project_crud.get_multi(session)
 
 
 @router.post(
@@ -71,9 +70,8 @@ async def delete_charity_project(
         charity_project
     )
 
-    charity_project = await charity_project_crud.remove(
-        charity_project, session
-    )
+    await charity_project_crud.remove(charity_project, session)
+
     return charity_project
 
 
@@ -106,7 +104,7 @@ async def update_charity_project(
             charity_project, obj_in.full_amount
         )
 
-    charity_project = await charity_project_crud.update(
+    await charity_project_crud.update(
         db_obj=charity_project, obj_in=obj_in, session=session
     )
 
